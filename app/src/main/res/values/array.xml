@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="izmena_ImenaUnos">
+        <item>Restoran1</item>
+        <item>Restoran2</item>
+        <item>Restoran3</item>
+        <item>Restoran4</item>
+    </string-array>
+
+    <string-array name="izmena_ImenaVrednost">
+        <item>Restoran1</item>
+        <item>Restoran2</item>
+        <item>Restoran3</item>
+        <item>Restoran4</item>
+    </string-array>
+
+
+    <string-array name="izmena_AdresaUnos">
+        <item>Adresa1</item>
+        <item>Adresa2</item>
+        <item>Adresa3</item>
+        <item>Adresa4</item>
+    </string-array>
+
+    <string-array name="izmena_AdresaVrednost">
+        <item>Adresa1</item>
+        <item>Adresa2</item>
+        <item>Adresa3</item>
+        <item>Adresa4</item>
+    </string-array>
+
+</resources>

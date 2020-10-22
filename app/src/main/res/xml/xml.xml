@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Ime Restorana">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="promeni_ime"
+            android:summary="Dozvoli promenu imena restorana"
+            android:title="Promeni ime restorana" />
+        <ListPreference
+            android:defaultValue="1"
+            android:dependency="promeni_ime"
+            android:entries="@array/izmena_ImenaUnos"
+            android:entryValues="@array/izmena_ImenaVrednost"
+            android:key="list_preference_1"
+            android:title="Ime restorana" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Adresa Restorana">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="promeni_adresu"
+            android:summary="Dozvoli promenu adrese restorana"
+            android:title="Promeni adresu restorana" />
+        <ListPreference
+            android:defaultValue="1"
+            android:dependency="promeni_adresu"
+            android:entries="@array/izmena_AdresaUnos"
+            android:entryValues="@array/izmena_AdresaVrednost"
+            android:key="list_preference_2"
+            android:title="Adresa restorana" />
+    </PreferenceCategory>
+</PreferenceScreen>
