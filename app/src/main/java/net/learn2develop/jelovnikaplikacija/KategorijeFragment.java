@@ -1,6 +1,9 @@
 package net.learn2develop.jelovnikaplikacija;
 
 import android.content.Context;
+import android.graphics.drawable.RotateDrawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,27 +28,34 @@ public class KategorijeFragment extends Fragment {
     private List<String> kategorije = new ArrayList<>();
     private ListView listView_Jela;
     private onKategorijaClickListener listener;
+    private ProgressBar progressBar;
+
     //2.Ova metoda unutar klase KategorijeFragment sluzi da nam se otvori sledeci novi prozor kada stnisnemo na fijoku Kategorije
     // Poziv na unapred kreiranu fragment_kategorija.xml nam to omogucava
     public KategorijeFragment() {
     }
+
     //LayoutInflater converts an XML layout file into corresponding ViewGroups and Widgets
-  //A ViewGroup is a special view that can contain other views (called children.)
-  // The view group is the base class for layouts and views containers
+    //A ViewGroup is a special view that can contain other views (called children.)
+    // The view group is the base class for layouts and views containers
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_kategorija, container, false);
     }
-     //Ova metoda onViewCreated mora biti u korelaciji sa onCreateView, kako bismo otvorili novi prozor, kao sto je gore objasnjenjo
+
+    //Ova metoda onViewCreated mora biti u korelaciji sa onCreateView, kako bismo otvorili novi prozor, kao sto je gore objasnjenjo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         listView_Jela = view.findViewById(R.id.listView_Kategorije);
+        progressBar = view.findViewById(R.id.progressbar);
 
-        setupList();
+        //setupList();
+        startAsyncTaskLoad();
     }
-//4. Pozivamo se na metodu List<String> getKategorije() unutar klase JeloProvider, koja nam ispisuje kategorije Glavno jelo, Dezert, itd.
+
+    //4. Pozivamo se na metodu List<String> getKategorije() unutar klase JeloProvider, koja nam ispisuje kategorije Glavno jelo, Dezert, itd.
     private void setupList() {
         kategorije = JeloProvider.getKategorije();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, kategorije);
@@ -57,8 +68,9 @@ public class KategorijeFragment extends Fragment {
             }
         });
     }
-//6.  Bez if else metode u okviru onAttach ne bismo bili u mogucnosti da nam se prikaze drugi i treci prozor u
-     //okviru Kategorije. App bi nam pukao. Povezano je sa implements na MainActivity!!!
+
+    //6.  Bez if else metode u okviru onAttach ne bismo bili u mogucnosti da nam se prikaze drugi i treci prozor u
+    //okviru Kategorije. App bi nam pukao. Povezano je sa implements na MainActivity!!!
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -66,7 +78,6 @@ public class KategorijeFragment extends Fragment {
             listener = (onKategorijaClickListener) context;
         } else {
             Toast.makeText(getContext(), "Morate implementirati onAttach Kategorija", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -74,6 +85,46 @@ public class KategorijeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+
+
+    private void startAsyncTaskLoad() {
+        LoadAsyncTask task = new LoadAsyncTask();
+        task.execute(4);
+    }
+
+    public class LoadAsyncTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            listView_Jela.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            listView_Jela.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            super.onPostExecute(aVoid);
+            setupList();
+        }
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            int sekunde = integers[0];
+
+            for (int i = 0; i < sekunde; i++) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
     }
 //3. Pre nego sto krenemo da radimo na setupList metodi, prvo kreiramo interface
     public interface onKategorijaClickListener {
